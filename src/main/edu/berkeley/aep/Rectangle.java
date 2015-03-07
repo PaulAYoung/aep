@@ -14,7 +14,7 @@ public class Rectangle {
     }
 
     public int area() {
-        return 0;
+        return length * width;
     }
 
     public int perimeter() {
