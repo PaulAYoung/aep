@@ -15,15 +15,18 @@ public class Node {
         this.connect(this);
     }
 
+
     public boolean canReach(Node node) {
-        if (this.connections.contains(node)){
-            return true;
-        }else {
-            for (Node n : connections){
-                if (n.canReach(node)) return true;
-            }
-            return false;
+        return this.allconnections().contains(node);
+    }
+
+    private Set<Node> allconnections() {
+        Set<Node> nodes = new HashSet<Node>();
+        nodes.addAll(this.connections);
+        for (Node n : this.connections){
+            nodes.addAll(n.connections);
         }
+        return nodes;
     }
 
     public void connect(Node node) {
