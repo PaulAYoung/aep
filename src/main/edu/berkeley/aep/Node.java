@@ -1,32 +1,43 @@
 package edu.berkeley.aep;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Created by paul on 4/3/15.
+ * Understands a location
  */
 public class Node {
-    private final String name;
     private Set<Node> connections = new HashSet<Node>();
 
-    public Node(String name) {
-        this.name = name;
+    public Node() {
         this.connect(this);
     }
 
 
     public boolean canReach(Node node) {
-        return this.allconnections().contains(node);
-    }
+        List<Node> toExplore = new ArrayList<Node>();
+        toExplore.add(this);
+        Set<Node> scheduled = new HashSet<Node>();
 
-    private Set<Node> allconnections() {
-        Set<Node> nodes = new HashSet<Node>();
-        nodes.addAll(this.connections);
-        for (Node n : this.connections){
-            nodes.addAll(n.connections);
+        Node current;
+        Set<Node> newNodes;
+
+        while (!toExplore.isEmpty()){
+            current = toExplore.remove(0);
+            if (current.connections.contains(node)){
+                return true;
+            }
+
+            newNodes = new HashSet<Node>(current.connections);
+            newNodes.removeAll(scheduled);
+
+            toExplore.addAll(newNodes);
+            scheduled.addAll(current.connections);
         }
-        return nodes;
+
+        return false;
     }
 
     public void connect(Node node) {
