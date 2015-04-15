@@ -1,15 +1,8 @@
 package edu.berkeley.aep;
 
-import junit.framework.Assert;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
-
-/**
- * Created by paul on 4/3/15.
- */
-
-
+import static org.junit.Assert.*;
 
 public class NodeTest {
 
@@ -32,6 +25,8 @@ public class NodeTest {
         d.connect(e);
         e.connect(b);
         h.connect(b);
+
+        d.connect(f);
     }
 
     @Test
@@ -63,4 +58,22 @@ public class NodeTest {
     public void hShouldNotReachG(){
         assertFalse(h.canReach(g));
     }
+
+    @Test
+    public void hShouldBeZeroHopsFromSelf(){ assertEquals(0, h.hopsTo(h));}
+
+    @Test
+    public void hShouldBeOnHopFromB(){ assertEquals(1, h.hopsTo(b));}
+
+    @Test
+    public void hShouldNotBeAbleToReachG(){ assertEquals(Node.UNREACHABLE, h.hopsTo(g));}
+
+    @Test
+    public void hShouldBeThreeHopsFromE(){ assertEquals(3, h.hopsTo(e));}
+
+    @Test
+    public void cShouldBeTwoHopsFromB(){ assertEquals(2, c.hopsTo(b));}
+
+    @Test
+    public void cShouldBeTwoHopsFromF(){ assertEquals(2, c.hopsTo(f));}
 }

@@ -1,15 +1,16 @@
 package edu.berkeley.aep;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Understands a location
+ * Understands a location in a network
  */
 public class Node {
+
+    public static final int UNREACHABLE = Integer.MAX_VALUE;
+
     private Set<Node> connections = new HashSet<Node>();
+
 
     public Node() {
         this.connect(this);
@@ -42,5 +43,32 @@ public class Node {
 
     public void connect(Node node) {
         this.connections.add(node);
+    }
+
+    public int hopsTo(Node node){
+        Set<Node> toCheck = new HashSet<Node>();
+        toCheck.add(this);
+        return hopsTo(node, toCheck, new HashSet<Node>());
+    }
+
+    private static int hopsTo(Node node, Set<Node> toCheck, Collection<Node> explored) {
+        Set<Node> nextExplore = new HashSet<Node>();
+
+        for (Node n : toCheck){
+            if (n == node) return 0;
+
+            nextExplore.addAll(n.connections);
+        }
+
+        explored.addAll(toCheck);
+        nextExplore.removeAll(explored);
+
+        int d;
+
+        if (nextExplore.isEmpty()) d = UNREACHABLE;
+        else d = hopsTo(node, nextExplore, explored);
+
+        if (d<UNREACHABLE) return 1+d;
+        else return UNREACHABLE;
     }
 }
